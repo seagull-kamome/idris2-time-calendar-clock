@@ -1,0 +1,39 @@
+package time-calendar-clock
+
+brief   = "Calendar time package of Idris2"
+version = 0.0.1
+authors = "HATTORI, Hiroki <seagull.kamome@gmail.com>"
+license = "MIT"
+
+sourcedir = "./src"
+depends   = base >= 0.6.0
+          , contrib >= 0.6.0
+          , elab-util >= 0.6.0
+          , sop >= 0.6.0
+          , missing-numeric >= 0.6.0
+
+modules = Data.Time.Calendar
+        , Data.Time.Calendar.CalendarDiffDays
+        , Data.Time.Calendar.Days
+        , Data.Time.Calendar.Gregorian
+        , Data.Time.Calendar.Julian
+        , Data.Time.Calendar.Month
+        , Data.Time.Calendar.MonthDay
+        , Data.Time.Calendar.OrdinalDate
+        , Data.Time.Calendar.Types
+        , Data.Time.Calendar.WeekDate
+        , Data.Time.Clock
+        , Data.Time.Clock.Internal.UTCTime
+        , Data.Time.Clock.AbsoluteTime
+        , Data.Time.Clock.DiffTime
+        , Data.Time.Clock.POSIX
+        , Data.Time.Clock.System
+        , Data.Time.Clock.UTCTime
+        , Data.Time.Format
+        , Data.Time.LocalTime
+        , Data.Time.LocalTime.Internal.LocalTime
+        , Data.Time.LocalTime.CalendarDiffTime
+        , Data.Time.LocalTime.TimeOfDay
+        , Data.Time.LocalTime.TimeZone
+        , Data.Time.LocalTime.ZonedTime
+

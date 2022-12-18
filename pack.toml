@@ -1,0 +1,15 @@
+[custom.all.time-calendar-clock]
+type = "local"
+path = "."
+ipkg = "time-calendar-clock.ipkg"
+# test = "test/test.ipkg"
+
+# [custom.all.time-calendar-clock-test]
+# type = "local"
+# path = "tests"
+# ipkg = "test.ipkg"
+
+[custom.all.missing-numeric]
+type   = "local"
+path   = "../idris2-missing-numeric"
+ipkg   = "missing-numeric.ipkg"
