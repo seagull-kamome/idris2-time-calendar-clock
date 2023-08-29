@@ -57,8 +57,7 @@ toSystemTime : Int -> Int -> SystemTime
 
 public export
 Show SystemTime where
-  show x = "#" ++ show (systemSeconds x) ++ "s+"
-           ++ show (systemNanoseconds x) ++ "ns"
+  show x = "#\{show (systemSeconds x)}s+\{show (systemNanoseconds x)}ns"
 
 
 ||| Map leap-second values to the start of the following second.
@@ -222,8 +221,7 @@ Show SystemLocalTime where
     (y, m, d) = systemLocalDate x
     td = systemLocalTimeOfDay x
     tz = systemLocalTimeZone x
-    in show y ++ "-" ++ show m ++ "-" ++ show d ++ " "
-       ++ show td ++ " " ++ show tz
+    in "\{show y}-\{show m}-\{show d} \{show td} \{show tz}"
 
 
 -- vim: tw=80 sw=2 expandtab :

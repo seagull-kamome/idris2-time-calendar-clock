@@ -1,11 +1,16 @@
+||| Zoned time
+|||
+||| Copyrigh 2021-2023. Hattori,Hiroki
+||| See LICENSE for more detail.
 module Data.Time.LocalTime.ZonedTime
 
 import Data.Time.LocalTime.TimeZone
 import Data.Time.LocalTime.Internal.LocalTime
 import Data.Time.Clock.Internal.UTCTime
--- import Data.Time.Clock.System
 
 import Generics.Derive
+import Derive.Eq
+import Derive.Ord
 
 %default total
 %language ElabReflection
@@ -22,7 +27,7 @@ record ZonedTime where
   constructor MkZonedTime
   localtime : LocalTime
   timezone : TimeZone
-%runElab derive "ZonedTime" [Generic, Eq, Ord, DecEq]
+%runElab derive "ZonedTime" [Generic, Derive.Eq.Eq, Derive.Ord.Ord, DecEq]
 
 public export
 Show ZonedTime where

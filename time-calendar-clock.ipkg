@@ -1,7 +1,7 @@
 package time-calendar-clock
 
 brief   = "Calendar time package of Idris2"
-version = 0.0.1
+version = 0.0.2
 authors = "HATTORI, Hiroki <seagull.kamome@gmail.com>"
 license = "MIT"
 
@@ -10,7 +10,7 @@ depends   = base >= 0.6.0
           , contrib >= 0.6.0
           , elab-util >= 0.6.0
           , sop >= 0.6.0
-          , missing-numeric >= 0.6.0
+          , missing-numeric >= 0.7.0
 
 modules = Data.Time.Calendar
         , Data.Time.Calendar.CalendarDiffDays

@@ -1,3 +1,8 @@
+||| Months
+|||
+||| Copyright 2021-2023. HIROKI, Hattori
+||| This file is released under the MIT license, see LICENSE for more detail.
+|||
 module Data.Time.Calendar.Month
 
 import public Data.Time.Calendar.Types
@@ -6,6 +11,8 @@ import Data.Time.Calendar.Gregorian
 import Text.Format.Decimal
 
 import Generics.Derive
+import Derive.Eq
+import Derive.Ord
 
 %default total
 %language ElabReflection
@@ -19,7 +26,7 @@ export data Month = MkMonth Integer
 public export Cast Month Integer where cast (MkMonth x) = x
 public export Cast Integer Month where cast = MkMonth
 
-%runElab derive "Month" [Generic, Meta, Eq, Ord]
+%runElab derive "Month" [Generic, Meta, Derive.Eq.Eq, Derive.Ord.Ord]
 
 -- ---------------------------------------------------------------------------
 

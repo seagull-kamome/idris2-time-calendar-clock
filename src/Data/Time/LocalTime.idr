@@ -1,6 +1,11 @@
+||| Localtime
+||| 
+||| Copyright 2021-2023, HATTORI, Hiroki
+||| This file is released under the MIT license, see LICENSE for more detail.
+||| 
 module Data.Time.LocalTime
 
-import Data.So
+import Data.Nat
 import Data.Rational
 
 import public Data.Time.LocalTime.TimeZone
@@ -32,9 +37,9 @@ diffLocalTime a b = diffUTCTime (localTimeToUTC utc a) (localTimeToUTC utc b)
 ||| Get the local time of a UT1 time on a particular meridian (in degrees, positive is East).
 export ut1ToLocalTime : Rational -> UniversalTime -> Maybe LocalTime
 ut1ToLocalTime long date = let
-  localTime = date.modJulianDate + long / 360
+  localTime = date.modJulianDate + (long `div` 360)
+  localMJD  = floor localTime
   in do
-    localMJD  <- floor localTime
     dt <- dayFractionToTimeOfDay (localTime - cast localMJD)
     pure $ MkLocalTime (ModifiedJulianDay localMJD) dt
 
@@ -42,7 +47,7 @@ ut1ToLocalTime long date = let
 export localTimeToUT1 : Rational -> LocalTime -> UniversalTime
 localTimeToUT1 long lt =
     ModJulianDate (fromInteger lt.localDay.modifiedJulianDay
-                  + (timeOfDayToDayFraction lt.localTimeOfDay) - (long / 360))
+                  + (timeOfDayToDayFraction lt.localTimeOfDay) - (long `div` 360))
 
 public export
 Show UniversalTime where

@@ -1,3 +1,7 @@
+||| POSIX clock time
+|||
+||| Copyrigh 2021-2023. Hattori,Hiroki
+||| See LICENSE for more detail.
 module Data.Time.Clock.POSIX
 
 import Data.Fixed

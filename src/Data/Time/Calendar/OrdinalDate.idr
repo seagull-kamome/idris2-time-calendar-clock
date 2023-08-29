@@ -1,3 +1,8 @@
+||| Ordinal date
+|||
+||| Copyright 2021-2023. HIROKI, Hattori
+||| This file is released under the MIT license, see LICENSE for more detail.
+|||
 module Data.Time.Calendar.OrdinalDate
 
 import Data.Time.Calendar.Days

@@ -6,6 +6,8 @@
 module Data.Time.Calendar.CalendarDiffDays
 
 import Generics.Derive
+import Derive.Eq
+import Derive.Ord
 
 %default total
 %language ElabReflection
@@ -17,7 +19,7 @@ record CalendarDiffDays where
   constructor MkCalendarDiffDays
   month : Integer
   day : Integer
-%runElab derive "CalendarDiffDays" [Generic, Meta, Eq, DecEq, Ord]
+%runElab derive "CalendarDiffDays" [Generic, Meta, Derive.Eq.Eq, Derive.Ord.Ord, DecEq]
 
 
 public export

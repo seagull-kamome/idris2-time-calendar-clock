@@ -1,3 +1,8 @@
+||| Absolute time
+||| 
+||| Copyright 2021-2023, HATTORI, Hiroki
+||| This file is released under the MIT license, see LICENSE for more detail.
+||| 
 module Data.Time.Clock.AbsoluteTime
 
 import Data.Fixed
@@ -5,6 +10,9 @@ import Data.Time.Calendar.Days
 import Data.Time.Clock.DiffTime
 
 import Generics.Derive
+import Derive.Eq
+import Derive.Ord
+import Derive.Show
 
 %default total
 %language ElabReflection
@@ -12,7 +20,7 @@ import Generics.Derive
 -- --------------------------------------------------------------------------
 
 export data AbsoluteTime = MkAbsoluteTime DiffTime
-%runElab derive "AbsoluteTime" [Generic, Meta, Eq, Ord, DecEq, Show]
+%runElab derive "AbsoluteTime" [Generic, Meta, Derive.Eq.Eq, Derive.Ord.Ord, Derive.Show.Show, DecEq]
 
 
 ||| The epoch of TAI, which is 1858-11-17 00:00:00 TAI.

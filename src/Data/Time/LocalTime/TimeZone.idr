@@ -1,8 +1,14 @@
+||| Timezone
+|||
+||| Copyrigh 2023. Hattori,Hiroki
+||| See LICENSE for more detail.
 module Data.Time.LocalTime.TimeZone
 
 import Text.Format.Decimal
 
 import Generics.Derive
+import Derive.Eq
+import Derive.Ord
 
 %default total
 %language ElabReflection
@@ -18,7 +24,7 @@ record TimeZone where
   ||| Is this timezone just persisting for the summer?
   summeronly : Bool
   name : String
-%runElab derive "TimeZone" [Generic, Eq, Ord, DecEq]
+%runElab derive "TimeZone" [Generic, Derive.Eq.Eq, Derive.Ord.Ord, DecEq]
 
 
 

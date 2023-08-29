@@ -1,5 +1,9 @@
+||| Day of week and Weekdate
+|||
+||| Copyright 2021-2023. HIROKI, Hattori
+||| This file is released under the MIT license, see LICENSE for more detail.
+|||
 module Data.Time.Calendar.WeekDate
-
 
 import Data.Vect
 import Data.Fin
@@ -7,6 +11,8 @@ import Data.Fin
 import Data.Time.Calendar.Types
 import Data.Time.Calendar.Days
 import Data.Time.Calendar.OrdinalDate
+
+import Text.Format.Decimal
 
 %default total
 
@@ -127,8 +133,9 @@ toWeekCalendar wt ws d = let
         else if d < j1s then (y0, (cast $ diffDays d j1) `div` 7 + 1, dw)
         else (y0 + 1, (cast $ diffDays d j1s) `div` 7 + 1, dw)
 
-                                                                                                                                    -- | Convert from the given kind of "week calendar".
--- Invalid week and day values will be clipped to the correct range.
+
+||| Convert from the given kind of "week calendar".
+||| Invalid week and day values will be clipped to the correct range.
 export
 fromWeekCalendar : FirstWeekType -- ^ how to reckon the first week of the year
                 -> DayOfWeek -- ^ the first day of each week
@@ -176,6 +183,7 @@ pattern YearWeekDay y wy dw <- (toWeekDate -> (y,wy,toEnum -> dw)) where
   YearWeekDay y wy dw = fromWeekDate y wy (fromEnum dw)
 -}
 
+
 ||| Convert from ISO 8601 Week Date format. First argument is year, second week number (1-52 or 53), third day of week (1 for Monday to 7 for Sunday).
 ||| Invalid week and day values will return Nothing.
 export fromWeekDateValid : Year -> WeekOfYear -> Int -> Maybe Day
@@ -184,13 +192,13 @@ fromWeekDateValid y wy dw =
   then Nothing
   else fromWeekCalendarValid FirstMostWeek Monday y wy (cast $ restrict 6 $ cast dw)
 
-{-
--- | Show in ISO 8601 Week Date format as yyyy-Www-d (e.g. \"2006-W46-3\").
-showWeekDate : Day -> String
-showWeekDate date = (show4 y) ++ "-W" ++ (show2 w) ++ "-" ++ (show d)
-  where (y, w, d) = toWeekDate date
--}
 
+
+||| Show in ISO 8601 Week Date format as yyyy-Www-d (e.g. \"2006-W46-3\").
+showWeekDate : Day -> String
+showWeekDate date =
+  let (y, w, d) = toWeekDate date
+    in "\{format' (zeroPad 4) y}-W\{format' (zeroPad 2) w}-\{show d}"
 
 -- --------------------------------------------------------------------------
 -- vim: tw=80 sw=2 expandtab :

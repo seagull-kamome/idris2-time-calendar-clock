@@ -1,3 +1,8 @@
+||| Gregorian calendar.
+|||
+||| Copyright 2021-2023. HIROKI, Hattori
+||| This file is released under the MIT license, see LICENSE for more detail.
+|||
 module Data.Time.Calendar.Gregorian
 
 import public Data.Time.Calendar.Types

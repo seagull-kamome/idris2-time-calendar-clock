@@ -1,3 +1,7 @@
+||| UTC Time
+|||
+||| Copyrigh 2023. Hattori,Hiroki
+||| See LICENSE for more detail.
 module Data.Time.Clock.UTCTime
 
 import public Data.Time.Clock.Internal.UTCTime

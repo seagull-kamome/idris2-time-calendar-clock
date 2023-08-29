@@ -1,8 +1,13 @@
+||| TimeOfDay
+|||
+||| Copyrigh 2023. Hattori,Hiroki
+||| See LICENSE for more detail.
 module Data.Time.LocalTime.TimeOfDay
 
 import Data.So
 import Data.Maybe
 
+import Data.Nat
 import Data.Fixed
 import Data.Rational
 import Data.Time.Clock.DiffTime
@@ -10,6 +15,8 @@ import Data.Time.LocalTime.TimeZone
 import Text.Format.Decimal
 
 import Generics.Derive
+import Derive.Eq
+import Derive.Ord
 
 %default total
 %language ElabReflection
@@ -22,7 +29,7 @@ record TimeOfDay where
   hour : Int
   min : Int
   sec : Fixed 12
-%runElab derive "TimeOfDay" [Generic, Eq, Ord, DecEq]
+%runElab derive "TimeOfDay" [Generic, Derive.Eq.Eq, Derive.Ord.Ord, DecEq]
 
 public export
 Show TimeOfDay where
@@ -106,8 +113,9 @@ export timeOfDayToDayFraction : TimeOfDay -> Rational
 timeOfDayToDayFraction tod = let
   MkFixed num = (timeOfDayToTime tod).seconds
   MkFixed den = nominalDay.seconds
-  _ = the (So (den /= 0)) $ believe_me Oh
-  in num %: den
+  den' = the Nat $ fromInteger den
+  prf : NonZero den' = believe_me SIsNonZero
+  in MkRational num den'
 
 
 -- --------------------------------------------------------------------------

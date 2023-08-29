@@ -1,3 +1,8 @@
+||| Zoned time - Ported from Haskell time package.
+||| 
+||| Copyright 2021-2023, HATTORI, Hiroki
+||| This file is released under the MIT license, see LICENSE for more detail.
+||| 
 module Data.Time.LocalTime.Internal.LocalTime
 
 import Data.Time.Calendar.Days
@@ -8,6 +13,8 @@ import Data.Time.LocalTime.TimeZone
 import Data.Time.LocalTime.TimeOfDay
 
 import Generics.Derive
+import Derive.Eq
+import Derive.Ord
 
 %default total
 %language ElabReflection
@@ -23,7 +30,7 @@ record LocalTime where
   constructor MkLocalTime
   localDay : Day
   localTimeOfDay : TimeOfDay
-%runElab derive "LocalTime" [Generic, Eq, Ord, DecEq]
+%runElab derive "LocalTime" [Generic, Derive.Eq.Eq, Derive.Ord.Ord, DecEq]
 
 public export
 Show LocalTime where

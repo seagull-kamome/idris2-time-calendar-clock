@@ -1,3 +1,8 @@
+||| Calendar difftime
+||| 
+||| Copyright 2021-2023, HATTORI, Hiroki
+||| This file is released under the MIT license, see LICENSE for more detail.
+||| 
 module Data.Time.LocalTime.CalendarDiffTime
 
 import Data.Fixed
@@ -5,6 +10,7 @@ import Data.Time.Clock.DiffTime
 import Data.Time.Calendar.CalendarDiffDays
 
 import Generics.Derive
+import Derive.Eq
 
 %default total
 %language ElabReflection
@@ -16,7 +22,7 @@ record CalendarDiffTime where
   constructor MkCalendarDiffTime
   month : Integer
   time : NominalDiffTime
-%runElab derive "CalendarDiffTime" [Generic, Eq, DecEq]
+%runElab derive "CalendarDiffTime" [Generic, Derive.Eq.Eq, DecEq]
 
 
 public export
