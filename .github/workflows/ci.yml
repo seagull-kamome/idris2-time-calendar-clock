@@ -1,4 +1,4 @@
-name: Ubuntu
+name: AnyCommit
 on:
   push:
     branches:
@@ -11,64 +11,34 @@ on:
 
 env:
   SCHEME: scheme
-  IDRIS2_TESTS_CG: chez
+  IDRIS2_CFLAGS: -O2
 
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      IDRIS2_CC: gcc
-    container: snazzybucket/idris2:latest
+      IDRIS2_CC: clang
+      PACK_DIR: /root/.pack
+    container: ghcr.io/stefan-hoeck/idris2-pack:latest    
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: install dependencies.
-        run: |
-          apt-get update
-          apt-get install -y gcc libgmp-dev
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '16.x'
-      - name: Idris version
-        run: idris2 --version
-        shell: bash
-
-      #
-      # Install dependet modules.
-      #
-      - name: checkout idris2-elab-util
-        uses: actions/checkout@v3
-        with:
-          repository: stefan-hoeck/idris2-elab-util
-          path: idris2-elab-util
-
-      - name: checkout idris2-sop
-        uses: actions/checkout@v3
-        with:
-          repository: stefan-hoeck/idris2-sop
-          path: idris2-sop
-      
-      - name: checkout missing-numeric
-        uses: actions/checkout@v3
-        with:
-          repository: seagull-kamome/idris2-missing-numeric
-          path: idris2-missing-numeric
-
-      - name: install dependencies.
+      - name: Setup dependencies
         run: |
-          idris2 --install idris2-elab-util/elab-util.ipkg
-          idris2 --install idris2-sop/sop.ipkg
-          idris2 --install idris2-missing-numeric/missing-numeric.ipkg
-        shell: bash
+          apt-get update
+          apt-get -y install gcc clang-14
 
-      #
-      #
-      #
-      - name: Building time-calendar-clock
-        run: make -C . clean deepclean build install
-        shell: bash
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Test time-calendar-clock
-        run: make -C . check
-        shell: bash
+      - run: idris2 --version
+      - run: pack install-deps time-calendar-clock
+      - run: pack build time-calendar-clock
+      - run: IDRIS2_CG=chez pack test time-calendar-clock
+      - run: IDRIS2_CG=refc IDRIS2_CC=gcc pack test time-calendar-clock
+      - run: IDRIS2_CG=refc IDRIS2_CC=clang-14 pack test time-calendar-clock
+      - run: IDRIS2_CG=node pack test time-calendar-clock
+      - run: pack install time-calendar-clock
+

@@ -20,7 +20,7 @@ main = do
     putStrLn $ "  systemToUTCTime : " ++ show (systemToUTCTime t)
     putStrLn $ "    <-> utcToSystemTime : " ++ show (utcToSystemTime (systemToUTCTime t))
     putStrLn $ "  truncateSystemTimeLeapSecond : " ++ show (truncateSystemTimeLeapSecond t)
-    putStrLn $ show $ dayOfWeek $ fromGregorian 2021 8 21
+    putStrLn $ "2021.8.21 is " ++ show (dayOfWeek $ fromGregorian 2021 8 21)
     putStrLn $ show $ (modifiedJulianDay $ fromGregorian 2021 8 21) `mod` 7
 
 
