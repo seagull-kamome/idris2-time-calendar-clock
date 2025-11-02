@@ -1,12 +1,11 @@
 ||| DiffTime
 |||
-||| Copyrigh 2023. Hattori,Hiroki
+||| Copyrigh 2023-2025. Hattori,Hiroki
 ||| See LICENSE for more detail.
 module Data.Time.Clock.DiffTime
 
 import Data.So
 import Data.Fixed
-import Control.Algebra
 
 import Generics.Derive
 import Derive.Eq

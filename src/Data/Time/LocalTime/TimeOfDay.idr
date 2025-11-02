@@ -106,7 +106,7 @@ sinceMidnight = timeOfDayToTime
 ||| Get the time of day given the fraction of a day since midnight.
 export dayFractionToTimeOfDay : Rational -> Maybe TimeOfDay
 dayFractionToTimeOfDay df =
-  map (timeToTimeOfDay . the NominalDiffTime . SecondsToDiffTime) $ cast (df * 86400)
+  map (timeToTimeOfDay . SecondsToDiffTime {nominal=True}) $ cast (df * 86400)
 
 ||| Get the fraction of a day since midnight given a time of day.
 export timeOfDayToDayFraction : TimeOfDay -> Rational
@@ -114,7 +114,7 @@ timeOfDayToDayFraction tod = let
   MkFixed num = (timeOfDayToTime tod).seconds
   MkFixed den = nominalDay.seconds
   den' = the Nat $ fromInteger den
-  prf : NonZero den' = believe_me SIsNonZero
+  prf : NonZero den' = believe_me ItIsSucc
   in MkRational num den'
 
 
