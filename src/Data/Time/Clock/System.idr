@@ -29,7 +29,7 @@ data SystemTime : Type where [external]
 
 %foreign "scheme,chez:current-time"
          "javascript:lambda:() => new Date()"
-         "RefC:clockTimeUTC"
+         "RefC:clockTimeUtc"
 prim__systime_get : PrimIO SystemTime
 
 
@@ -49,9 +49,19 @@ systemSeconds : SystemTime -> Int
 systemNanoseconds : SystemTime -> Int
 
 
-%foreign "scheme,chez:(lambda (s ns) (make-time 'time-utc ns s))"
-         "javascript:lambda:(s, ns) => new Date(s * 1000 + (ns / 1000000))"
+-- On RefC and rc2 a 'SystemTime' is a boxed Bits64 count of nanoseconds since
+-- the epoch (what 'clockTimeUtc' gives, and 'clockSecond', 'clockNanosecond'
+-- read), so one made from a count is the runtime's own 'mkBits64'. A time before
+-- the epoch cannot be made there.
+%foreign "scheme,chez:(lambda (ns) (make-time 'time-utc (mod ns 1000000000) (div ns 1000000000)))"
+         "javascript:lambda:(ns) => new Date(Math.floor(ns / 1000000))"
+         "RefC:idris2_mkBits64"
+         "RC2:idris2rc2_mkBits64"
+toSystemTimeNs : Int -> SystemTime
+
+
 toSystemTime : Int -> Int -> SystemTime
+toSystemTime s ns = toSystemTimeNs (s * 1000000000 + ns)
 
 
 
@@ -126,8 +136,12 @@ systemToTAITime t = let
 public export data SystemLocalTime : Type where [external]
 
 
+-- On RefC and rc2 a 'SystemLocalTime' is the same boxed count of nanoseconds as a
+-- 'SystemTime'; on rc2 the fields are read with 'localtime_r'. RefC has nothing
+-- in its runtime that reads them.
 %foreign "scheme,chez:current-date"
          "javascript:lambda:() => new Date()"
+         "RefC:clockTimeUtc"
 export prim__getSystemLocalTime : PrimIO SystemLocalTime
 
 export getSystemLocalTime : HasIO io => io SystemLocalTime
@@ -136,6 +150,7 @@ getSystemLocalTime = primIO prim__getSystemLocalTime
 
 %foreign "scheme,chez:date-year"
          "javascript:lambda:(x) => x.getFullYear()"
+         "CExpr:({ time_t t_ = (time_t)(idris2rc2_to_u64($1) / 1000000000ULL); struct tm tm_; localtime_r(&t_, &tm_); (int64_t)(tm_.tm_year + 1900); }),libc,time.h"
 prim__systemLocalTimeYear : SystemLocalTime -> Int
 
 
@@ -146,45 +161,53 @@ systemLocalTimeYear = cast . prim__systemLocalTimeYear
 
 %foreign "scheme,chez:date-month"
          "javascript:lambda:(x) => x.getMonth() + 1"
+         "CExpr:({ time_t t_ = (time_t)(idris2rc2_to_u64($1) / 1000000000ULL); struct tm tm_; localtime_r(&t_, &tm_); (int64_t)(tm_.tm_mon + 1); }),libc,time.h"
 export systemLocalTimeMonth : SystemLocalTime -> Int
 
 
 %foreign "scheme,chez:date-day"
          "javascript:lambda:(x) => x.getDate()"
+         "CExpr:({ time_t t_ = (time_t)(idris2rc2_to_u64($1) / 1000000000ULL); struct tm tm_; localtime_r(&t_, &tm_); (int64_t)(tm_.tm_mday); }),libc,time.h"
 export systemLocalTimeDay : SystemLocalTime -> Int
 
 
 %foreign "scheme,chez:date-hour"
          "javascript:lambda:(x) => x.getHours()"
+         "CExpr:({ time_t t_ = (time_t)(idris2rc2_to_u64($1) / 1000000000ULL); struct tm tm_; localtime_r(&t_, &tm_); (int64_t)(tm_.tm_hour); }),libc,time.h"
 export systemLocalTimeHour : SystemLocalTime -> Int
 
 
 %foreign "scheme,chez:date-minute"
          "javascript:lambda:(x) => x.getMinutes()"
+         "CExpr:({ time_t t_ = (time_t)(idris2rc2_to_u64($1) / 1000000000ULL); struct tm tm_; localtime_r(&t_, &tm_); (int64_t)(tm_.tm_min); }),libc,time.h"
 export systemLocalTimeMinute : SystemLocalTime -> Int
 
 %foreign "scheme,chez:date-second"
          "javascript:lambda:(x) => x.getSeconds()"
+         "CExpr:({ time_t t_ = (time_t)(idris2rc2_to_u64($1) / 1000000000ULL); struct tm tm_; localtime_r(&t_, &tm_); (int64_t)(tm_.tm_sec); }),libc,time.h"
 export systemLocalTimeSecond : SystemLocalTime -> Int
 
 %foreign "scheme,chez:date-nanosecond"
          "javascript:lambda:(x) => (x.getMilliseconds() * 1000000)"
+         "CExpr:(int64_t)(idris2rc2_to_u64($1) % 1000000000ULL)"
 export systemLocalTimeNanosecond : SystemLocalTime -> Int
 
 
 %foreign "scheme,chez:date-zone-offset"
          "javascript:lambda:(x) => (x.getTimezoneOffset() * 60)"
+         "CExpr:({ time_t t_ = (time_t)(idris2rc2_to_u64($1) / 1000000000ULL); struct tm tm_; localtime_r(&t_, &tm_); (int64_t)(-tm_.tm_gmtoff); }),libc,time.h"
 export systemLocalTimeOffset : SystemLocalTime -> Int
 
 
-%foreign "scheme,chez:(lambda (x) \"\")"
-         "javascript:lambda:(x) => ''"
+-- The name of the zone and whether it is summer time are not known on any
+-- backend: they were constants (Chez, JavaScript) and are plain definitions now,
+-- so that no backend needs a foreign function for them.
 export systemLocalTimeZoneName : SystemLocalTime -> String
+systemLocalTimeZoneName _ = ""
 
 
-%foreign "scheme,chez:(lambda (x) #f)"
-         "javascript:lambda:(x) => false"
 export systemLocalTimeIsSummerTime : SystemLocalTime -> Bool
+systemLocalTimeIsSummerTime _ = False
 
 
 
