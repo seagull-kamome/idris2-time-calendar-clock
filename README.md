@@ -1,5 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+**English** | [日本語](README.ja.md)
+
 # idris2-time-calendar-clock
 
 A comprehensive date, time, and calendar library for Idris 2, ported from and inspired by Haskell's standard [`time`](https://hackage.haskell.org/package/time) package.
