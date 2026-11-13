@@ -1,5 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+[English](README.md) | **日本語**
+
 # idris2-time-calendar-clock
 
 Haskell の標準ライブラリ [`time`](https://hackage.haskell.org/package/time) パッケージをベースに移植・設計された、Idris2 向けの高機能な日付・時刻・暦（カレンダー）ライブラリです。
